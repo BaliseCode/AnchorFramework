@@ -1,6 +1,6 @@
 {
     "name": "balise/anchor-framework",
-    "type": "project",
+    "type": "package",
     "license": "mit",
     "authors": [
         {
