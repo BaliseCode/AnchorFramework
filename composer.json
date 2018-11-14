@@ -1,0 +1,21 @@
+{
+    "name": "balise/anchor-framework",
+    "type": "project",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Simon Mongeau",
+            "email": "simon@balise.ca"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "windwalker/renderer": "~3.0",
+        "illuminate/view" : "4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Balise\\AnchorFramework\\": "/"
+        }
+    }
+}
