@@ -84,7 +84,6 @@ class Anchor
         return false;
     }
     public static function render() {
-        print_r(self::getTemplate());
         self::$data = self::getData();
         self::loadTemplate(self::getTemplate());
 
