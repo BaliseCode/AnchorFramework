@@ -24,7 +24,7 @@
         font-weight: 400;
         line-height: 1.1;
 
-        font-size: 33vmin;
+        font-size: 15vmin;
     }
     h1 small {
         font-size: 26px;

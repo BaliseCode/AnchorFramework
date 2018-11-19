@@ -1,10 +1,10 @@
-@extends('errorWrap')
+@extends('layout.wrapper')
 
-@section('title', {{ bloginfo('name') }})
+@section('title', '')
 
 @section('body')
 <div class="centeredContent">
-    <h1>{{ bloginfo('name') }}
+    <h1>{{ get_bloginfo('name') }}
         <small>{{ __('Welcome') }}</small>
     </h1>
 
