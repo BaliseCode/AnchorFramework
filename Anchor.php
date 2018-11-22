@@ -73,7 +73,6 @@ class Anchor
                 $wp_styles->done = array();
                 $wp_scripts->done = array();
             }
-            echo $template;
         } else {
             self::loadTemplate(array_slice($array,1));
         }
