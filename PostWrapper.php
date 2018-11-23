@@ -9,54 +9,67 @@
 
 namespace Balise\AnchorFramework;
 
+
 class PostWrapper {
     /*
     * CONSTRUCTOR
     *
     */
-    function __construct($post=null) {
+    function __construct($post=null,$isSync=false) {
         if (gettype ($post)==="integer") {
             $post = get_post($post);
         }
-        if ($post && gettype($post)==="object" ) {
-
+        if ($post && gettype($post)==="object" && $isSync) {
             $this->id = $post->ID;
+            $this->order = $post->menu_order;
+            $this->menu_order = $post->menu_order;
+            $this->post_type = $post->post_type;
+            $this->guid = $post->guid;
+            $this->url = get_permalink($post);
             $this->slug = $post->post_name;
             $this->title = $post->post_title;
             $this->content = apply_filters('the_content', $post->post_content);
             $this->excerpt = $post->post_excerpt;
             $this->author_id = $post->author;
             $this->post_parent = $post->post_parent;
-
             if ($post->post_parent)  {
                 $this->parent = new AsycPostWrapper($post->post_parent);
             }
+            $this->meta = new PostMetaWrapper($post);
+            /*
+            // TODO: ADD THIS LIST
+            [post_date] =>
+            [post_date_gmt] =>
+            [post_modified] =>
+            [post_modified_gmt] =>
+            [post_status] =>
+            [comment_status] =>
+            [ping_status] =>
+            [post_password] =>
+            [to_ping] =>
+            [pinged] =>
+            [post_mime_type] =>
+            [comment_count] =>
+            */
+
         }
+    }
+    public function __set($name, $value) {
 
-        /*
-
-        // TODO: ADD THIS LIST
-        [post_date] =>
-        [post_date_gmt] =>
-        [post_status] =>
-        [comment_status] =>
-        [ping_status] =>
-        [post_password] =>
-        [to_ping] =>
-        [pinged] =>
-        [post_modified] =>
-        [post_modified_gmt] =>
-        [post_content_filtered] =>
-        [guid] =>
-        [menu_order] =>
-        [post_type] =>
-        [post_mime_type] =>
-        [comment_count] =>
-        [filter] =>
-        */
+    }
+}
+/*
+* LOAD THE META ON DEMAND
+*/
+class PostMetaWrapper {
+    function __construct($post=null) {
+        $this->post = $post;
+    }
+    public function __call($name, $arguments) {
+        return get_post_meta($this->post,$name,false);
     }
     public function __get($name) {
-        return $name;
+        return get_post_meta($this->post,$name,true);
     }
 }
 /*

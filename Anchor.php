@@ -18,7 +18,7 @@ class Anchor
 
     private static function getData() {
         global $post;
-        $return = new PostWrapper($post);
+        $return = new PostWrapper($post, true);
         if (!is_singular()) {
 
         } else {
@@ -26,7 +26,7 @@ class Anchor
             $return->posts = array();
             while (have_posts()) {
                 the_post();
-                $subreturn = new PostWrapper($post);
+                $subreturn = new PostWrapper($post, true);
                 $return->posts[] = $subreturn;
             }
         }
