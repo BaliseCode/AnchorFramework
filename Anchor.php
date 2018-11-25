@@ -72,7 +72,7 @@ class Anchor
         if (is_home()) { array_unshift($templates, 'home'); }
         if (is_front_page()) { array_unshift($templates, 'front-page'); }
 
-        return ;
+        return $templates;
     }
 
     private static function loadTemplate($array) {
