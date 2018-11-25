@@ -91,17 +91,18 @@ class Anchor
                 return '<?php wp_footer(); ?>';
             });
         }
-        if (self::checkTemplatePresence($array[0])) {
+         if (self::checkTemplatePresence($array[0])) {
             self::$renderer->render($array[0], []);
             $wp_styles->done = array();
             $wp_scripts->done = array();
             $template = self::$renderer->render($array[0], self::$data);
+            echo $template;
             if (!is_admin()) {
                 $wp_styles->done = array();
                 $wp_scripts->done = array();
             }
         } else {
-            self::loadTemplate(array_slice($array,1));
+            self::loadTemplate(array_slice($array,1)); 
         }
     }
     protected static function checkTemplatePresence($name) {
