@@ -78,7 +78,7 @@ class Anchor
     private static function loadTemplate($array) {
 
         global $wp_styles,$wp_scripts;
-        if (count($array)===0) return;
+         if (!$array || !is_array($array) || count($array)===0) return;
         if (!self::$renderer) {
             $paths = new \SplPriorityQueue;
             $paths->insert(get_template_directory().'/app/views', 200);
