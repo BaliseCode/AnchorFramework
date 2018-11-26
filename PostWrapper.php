@@ -1,26 +1,25 @@
 <?php
-
 /*
 * (c) Balise.ca
 *
 * This source file is subject to the MIT license that is bundled
 * with this source code in the file LICENSE.
 */
-
 namespace Balise\AnchorFramework;
-
-
 class PostWrapper {
+    private $isSync;
     /*
     * CONSTRUCTOR
     *
     */
     function __construct($post=null,$isSync=false) {
-        if (gettype ($post)==="integer") {
+        $this->isSync = $isSync;
+        if (gettype($post)==="integer") {
             $post = get_post($post);
         }
         if ($post && gettype($post)==="object" && $isSync) {
             $this->id = $post->ID;
+            echo $this->id;
             $this->order = $post->menu_order;
             $this->menu_order = $post->menu_order;
             $this->post_type = $post->post_type;
@@ -51,11 +50,13 @@ class PostWrapper {
             [post_mime_type] =>
             [comment_count] =>
             */
-
+            $this->isSync = false;
         }
     }
     public function __set($name, $value) {
-
+        if ($this->isSync) {
+            $this->$name = $value;
+        }
     }
 }
 /*
