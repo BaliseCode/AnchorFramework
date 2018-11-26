@@ -19,7 +19,6 @@ class PostWrapper {
         }
         if ($post && gettype($post)==="object" && $isSync) {
             $this->id = $post->ID;
-            echo $this->id;
             $this->order = $post->menu_order;
             $this->menu_order = $post->menu_order;
             $this->post_type = $post->post_type;
