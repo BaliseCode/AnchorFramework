@@ -9,95 +9,110 @@
 
 namespace Balise\AnchorFramework;
 
+use Windwalker\Renderer\BladeRenderer;
 
-class PostWrapper {
-    private $isSync;
-    /*
-    * CONSTRUCTOR
-    *
-    */
-    function __construct($post=null,$isSync=false) {
-        $this->isSync = $isSync;
-        if (gettype($post)==="integer") {
-            $post = get_post($post);
-        }
-        if ($post && gettype($post)==="object" && $isSync) {
-            $this->id = $post->ID;
-            echo $this->id;
-            $this->order = $post->menu_order;
-            $this->menu_order = $post->menu_order;
-            $this->post_type = $post->post_type;
-            $this->guid = $post->guid;
-            $this->url = get_permalink($post);
-            $this->slug = $post->post_name;
-            $this->title = $post->post_title;
-            $this->content = apply_filters('the_content', $post->post_content);
-            $this->excerpt = $post->post_excerpt;
-            $this->author_id = $post->author;
-            $this->post_parent = $post->post_parent;
-            if ($post->post_parent)  {
-                $this->parent = new AsycPostWrapper($post->post_parent);
+class Anchor
+{
+    public static $renderer;
+    public static $data;
+
+    private static function getData() {
+        global $post;
+        $return = new PostWrapper($post, true);
+        if (!is_singular()) {
+
+        } else {
+
+            $return->posts = array();
+            while (have_posts()) {
+                the_post();
+                $subreturn = new PostWrapper($post, true);
+                $return->posts[] = $subreturn;
             }
-            $this->meta = new PostMetaWrapper($post);
-            /*
-            // TODO: ADD THIS LIST
-            [post_date] =>
-            [post_date_gmt] =>
-            [post_modified] =>
-            [post_modified_gmt] =>
-            [post_status] =>
-            [comment_status] =>
-            [ping_status] =>
-            [post_password] =>
-            [to_ping] =>
-            [pinged] =>
-            [post_mime_type] =>
-            [comment_count] =>
-            */
-            $this->isSync = false;
+        }
+        return $return;
+    }
+    private static function getTemplate() {
 
+        global $post;
+
+        $templates = array('index');
+        if (is_404()) { array_unshift($templates, '404'); }
+        if (is_search()) { array_unshift($templates, 'search'); }
+
+        if (is_singular()) { array_unshift($templates, 'singular'); }
+
+        if (is_attachment()) {
+            $mime = $post->post_mime_type;
+            array_unshift($templates, $template, $mime, 'attachment');
+            // TOTO: COMPLETE WITH MEDIA
+
+        } elseif (is_single()) {
+            $type = $post->post_type;
+            $slug = $post->post_name;
+            $id = $post->id;
+            $template = get_page_template();
+            array_unshift($templates, $template, 'single-'.$slug.'-'.$type, 'single-'.$type,'single');
         }
-    }
-    public function __set($name, $value) {
-        if ($this->isSync) {
-            $this->$name = $value;
+        if (is_page()) {
+            $slug = $post->post_name;
+            $id = $post->id;
+            $template = get_page_template();
+            array_unshift($templates, $template, 'page-'.$slug, 'page-'.$id,'page');
         }
+
+
+        if (is_archive()) { array_unshift($templates, 'archive'); }
+        if (is_tag()) {
+            $queried = get_queried_object();
+            array_unshift($templates, 'tag-'.$queried->rewrite['slug'],'tag-'.$queried->term_id, 'tag');
+        }
+        // TODO; COMPLETE ARCHIVE
+
+        if (is_home()) { array_unshift($templates, 'home'); }
+        if (is_front_page()) { array_unshift($templates, 'front-page'); }
+
+        return $templates;
     }
 
-}
-/*
-* LOAD THE META ON DEMAND
-*/
-class PostMetaWrapper {
-    function __construct($post=null) {
-        $this->post = $post;
-    }
-    public function __call($name, $arguments) {
-        return get_post_meta($this->post,$name,false);
-    }
-    public function __get($name) {
-        return get_post_meta($this->post,$name,true);
-    }
-}
-/*
-* LOAD THE POST ON DEMAND
-*/
-class AsycPostWrapper {
-    private $virtual;
-    function __construct($id) {
-        $this->id = $id;
-        $this->virtual = null;
-    }
-    public function __tostring() {
-        return $this->id;
-    }
-    public function __get($name) {
-        if (!$this->virtual) {
-            $this->virtual = new PostWrapper($this->id);
+    private static function loadTemplate($array) {
+
+        global $wp_styles,$wp_scripts;
+         if (!$array || !is_array($array) || count($array)===0) return;
+        if (!self::$renderer) {
+            $paths = new \SplPriorityQueue;
+            $paths->insert(get_template_directory().'/app/views', 200);
+            $paths->insert(__DIR__.'/views', 100);
+            self::$renderer = new BladeRenderer($paths, array('cache_path' => get_template_directory(). '/public/views/'));
+            self::$renderer->addCustomCompiler('wp_head', function($expression) {
+                return '<?php wp_head(); ?>';
+            });
+            self::$renderer->addCustomCompiler('wp_footer', function($expression) {
+                return '<?php wp_footer(); ?>';
+            });
         }
-        if ($this->virtual) {
-            return $this->virtual->$name;
+         if (self::checkTemplatePresence($array[0])) {
+            self::$renderer->render($array[0], []);
+            @$wp_styles->done = array();
+            @$wp_scripts->done = array();
+            $template = self::$renderer->render($array[0], self::$data);
+            echo $template;
+            if (!is_admin()) {
+                $wp_styles->done = array();
+                $wp_scripts->done = array();
+            }
+        } else {
+            self::loadTemplate(array_slice($array,1)); 
         }
-        return '';
+    }
+    protected static function checkTemplatePresence($name) {
+        if (file_exists(get_template_directory()."/app/views/${name}.blade.php")) return true;
+        if (file_exists(__DIR__."/views/${name}.blade.php")) return true;
+        return false;
+    }
+    public static function render() {
+        self::$data = self::getData();
+        self::loadTemplate(self::getTemplate());
+
     }
 }
