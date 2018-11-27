@@ -134,6 +134,7 @@ class Anchor
             @$wp_styles->done = array();
             @$wp_scripts->done = array();
             $template = self::$renderer->render($array[0], self::$data);
+            echo $template;
             if (!is_admin()) {
                 $wp_styles->done = array();
                 $wp_scripts->done = array();
