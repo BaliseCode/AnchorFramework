@@ -4,7 +4,7 @@
 * (c) Balise.ca
 *
 * This source file is subject to the MIT license that is bundled
-* with this source code in the file LICENSE.
+* with this source code in the file LICENSE. 
 */
 
 namespace Balise\AnchorFramework;
@@ -15,7 +15,9 @@ class Anchor
 {
     public static $renderer;
     public static $data;
-
+    public static function Init() {
+        add_filter( 'theme_templates', array('Balise\AnchorFramework\Anchor','loadThemeTemplates'),10,4);
+    }
     private static function getData() {
         global $post;
         $return = new PostWrapper($post, true);
@@ -31,6 +33,37 @@ class Anchor
             }
         }
         return $return;
+    }
+    protected static function getAllBlades($pattern=null, $traversePostOrder=0 ) {
+        if (!$pattern) $pattern = get_template_directory().'/app/views/**/*.blade.php';
+
+        $patternParts = explode('/**/', $pattern);
+
+        $dirs = glob(array_shift($patternParts) . '/*', GLOB_ONLYDIR | GLOB_NOSORT);
+
+        $files = glob(str_replace('/**/','/',$pattern));
+        foreach ($dirs as $dir) {
+            $subDirContent = self::getAllBlades($dir . '/**/' . implode('/**/', $patternParts), $traversePostOrder);
+            if (!$traversePostOrder) {
+                $files = array_merge($files, $subDirContent);
+            } else {
+                $files = array_merge($subDirContent, $files);
+            }
+        }
+
+        return $files;
+    }
+    public static function loadThemeTemplates ( $post_templates, $object=null, $post=null, $post_type=null ) {
+        $blades = self::getAllBlades();
+        foreach($blades as $blade) {
+            if (preg_match( '/{{--\s*Template Name:(.*)--}}/mi', file_get_contents($blade), $header ) ) {
+                ;
+
+                $post_templates[basename($blade)] = $header[1];
+            }
+        }
+
+        return $post_templates;
     }
     private static function getTemplate() {
 
@@ -56,7 +89,7 @@ class Anchor
         }
         if (is_page()) {
             $slug = $post->post_name;
-            $id = $post->id;
+            $id = get_the_ID();
             $template = get_page_template();
             array_unshift($templates, $template, 'page-'.$slug, 'page-'.$id,'page');
         }
@@ -72,13 +105,18 @@ class Anchor
         if (is_home()) { array_unshift($templates, 'home'); }
         if (is_front_page()) { array_unshift($templates, 'front-page'); }
 
+        if ($tmpl = get_post_meta(get_the_ID(), '_wp_page_template',true)) {
+
+            array_unshift($templates, basename($tmpl,'.blade.php'));
+        }
+
         return $templates;
     }
 
     private static function loadTemplate($array) {
 
         global $wp_styles,$wp_scripts;
-         if (!$array || !is_array($array) || count($array)===0) return;
+        if (!$array || !is_array($array) || count($array)===0) return;
         if (!self::$renderer) {
             $paths = new \SplPriorityQueue;
             $paths->insert(get_template_directory().'/app/views', 200);
@@ -91,18 +129,17 @@ class Anchor
                 return '<?php wp_footer(); ?>';
             });
         }
-         if (self::checkTemplatePresence($array[0])) {
+        if (self::checkTemplatePresence($array[0])) {
             self::$renderer->render($array[0], []);
             @$wp_styles->done = array();
             @$wp_scripts->done = array();
             $template = self::$renderer->render($array[0], self::$data);
-            echo $template;
             if (!is_admin()) {
                 $wp_styles->done = array();
                 $wp_scripts->done = array();
             }
         } else {
-            self::loadTemplate(array_slice($array,1)); 
+            self::loadTemplate(array_slice($array,1));
         }
     }
     protected static function checkTemplatePresence($name) {
