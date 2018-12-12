@@ -40,6 +40,14 @@ class Anchor
 
     }
     /**
+    * render function hook
+    */
+    public static function Render() {
+        self::$data = self::getData();
+        self::loadTemplate(self::$templates);
+
+    }
+    /**
     * Load data object to include in the blade template
     */
     private static function getData() {
@@ -183,12 +191,5 @@ class Anchor
         if (file_exists(__DIR__."/views/${name}.blade.php")) return true;
         return false;
     }
-    /**
-    * render function hook
-    */
-    public static function render() {
-        self::$data = self::getData();
-        self::loadTemplate(self::$templates);
-
-    }
+    
 }
