@@ -26,12 +26,12 @@ class Anchor
     private static $woocommerce_loaded = false;
 
     /**
-    * start function that hook into the functions.php file
+    * Initial function that hook into the functions.php file
     * - Make sure that custom templates are loaded
     * - Make sure the template_loader hierarchy gets saved
     *
     */
-    public static function start () {
+    public static function Init () {
         add_filter( 'theme_templates', array('Balise\AnchorFramework\Anchor','loadThemeTemplates'),10,4);
         $types = array('index', '404', 'archive', 'author', 'category', 'tag', 'taxonomy', 'date','embed', 'home', 'frontpage', 'page', 'paged', 'search', 'single', 'singular', 'attachment');
         foreach ($types as $type) {
@@ -46,7 +46,7 @@ class Anchor
         global $post;
         if (!is_singular() || (function_exists('is_shop') && is_shop())) {
             /**
-            * If the post is an archive or the product page(woocommerce) load template page and 
+            * If the post is an archive or the product page(woocommerce) load template page and
             */
             $return = new PostWrapper($post, true);
             if ((function_exists('is_shop') && is_shop())) {
