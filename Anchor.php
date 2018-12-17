@@ -98,7 +98,7 @@ class Anchor
         foreach($blades as $blade) {
             if (preg_match( '/{{--\s*Template Name:(.*)--}}/mi', file_get_contents($blade), $header ) ) {
 
-                $post_templates[basename($blade)] = $header[1];
+                $post_templates[basename($blade,".blade.php")] = $header[1];
             }
         }
         return $post_templates;
