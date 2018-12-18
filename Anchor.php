@@ -60,6 +60,9 @@ class Anchor
             if ((function_exists('is_shop') && is_shop())) {
                 $return = new PostWrapper(get_post(wc_get_page_id( 'shop' )), true);
             }
+            if (get_option( 'page_for_posts' )) {
+                $return = new PostWrapper(get_post(get_option( 'page_for_posts' )), true);
+            }
             $return->posts = array();
             while (have_posts()) {
                 the_post();
