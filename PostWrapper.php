@@ -25,9 +25,9 @@ class PostWrapper {
             $this->guid = $post->guid;
             $this->url = get_permalink($post);
             $this->slug = $post->post_name;
-            $this->title = $post->post_title;
+            $this->title = $post->post_title; 
             $this->content = apply_filters('the_content', $post->post_content);
-            $this->excerpt = apply_filters( 'the_excerpt', get_the_excerpt($post) );
+            $this->excerpt = apply_filters( 'the_excerpt', $post->post_excerpt );
             $this->author_id = $post->author;
             $this->post_parent = $post->post_parent;
             if ($post->post_parent)  {
