@@ -27,28 +27,16 @@ class PostWrapper {
             $this->slug = $post->post_name;
             $this->title = $post->post_title;
             $this->content = apply_filters('the_content', $post->post_content);
-            $this->excerpt = $post->post_excerpt;
+            $this->excerpt = apply_filters( 'the_excerpt', get_the_excerpt($post) );
             $this->author_id = $post->author;
             $this->post_parent = $post->post_parent;
             if ($post->post_parent)  {
                 $this->parent = new AsycPostWrapper($post->post_parent);
             }
             $this->meta = new PostMetaWrapper($post);
-            /*
-            // TODO: ADD THIS LIST
-            [post_date] =>
-            [post_date_gmt] =>
-            [post_modified] =>
-            [post_modified_gmt] =>
-            [post_status] =>
-            [comment_status] =>
-            [ping_status] =>
-            [post_password] =>
-            [to_ping] =>
-            [pinged] =>
-            [post_mime_type] =>
-            [comment_count] =>
-            */
+            $this->thumbnail = new PostThumbnail($post); 
+            $this->date = get_the_date();
+            $this->permalink = get_permalink($post);
             $this->isSync = false;
         }
     }
@@ -68,8 +56,23 @@ class PostMetaWrapper {
     public function __call($name, $arguments) {
         return get_post_meta($this->post,$name,false);
     }
-    public function __get($name) {
+    public function __get($name) { 
         return get_post_meta($this->post,$name,true);
+    }
+}
+
+/*
+* LOAD THE THUMBNAIL  ON DEMAND  
+*/
+class PostThumbnail {
+    function __construct($post=null) {
+        $this->post = $post;
+    }
+    public function __invoke($arguments) {
+        return get_the_post_thumbnail_url($this->post);
+    }
+    public function __get($name) {
+       return get_the_post_thumbnail_url($this->post);
     }
 }
 /*
