@@ -44,7 +44,7 @@ class Anchor
     */
     public static function Render() {
         self::$data = self::getData();
-        self::loadTemplate(self::$templates);
+        self::loadTemplate(self::$templates); 
 
     }
     /**
@@ -52,25 +52,28 @@ class Anchor
     */
     private static function getData() {
         global $post;
-        if (!is_singular() || (function_exists('is_shop') && is_shop())) {
-            /**
-            * If the post is an archive or the product page(woocommerce) load template page and
-            */
-            $return = new PostWrapper($post, true);
-            if ((function_exists('is_shop') && is_shop())) {
-                $return = new PostWrapper(get_post(wc_get_page_id( 'shop' )), true);
+        $return = apply_filters('balise-anchor-getData', null);
+        if (!$return) {
+            if (!is_singular() || (function_exists('is_shop') && is_shop())) {
+                /**
+                * If the post is an archive or the product page(woocommerce) load template page and
+                */
+                $return = new PostWrapper($post, true);
+                if ((function_exists('is_shop') && is_shop())) {
+                    $return = new PostWrapper(get_post(wc_get_page_id( 'shop' )), true);
+                }
+                if (get_option( 'page_for_posts' )) {
+                    $return = new PostWrapper(get_post(get_option( 'page_for_posts' )), true);
+                }
+                $return->posts = array();
+                while (have_posts()) {
+                    the_post();
+                    $subreturn = new PostWrapper($post, true);
+                    $return->posts[] = $subreturn;
+                }
+            } else {
+                $return = new PostWrapper($post, true);
             }
-            if (get_option( 'page_for_posts' )) {
-                $return = new PostWrapper(get_post(get_option( 'page_for_posts' )), true);
-            }
-            $return->posts = array();
-            while (have_posts()) {
-                the_post();
-                $subreturn = new PostWrapper($post, true);
-                $return->posts[] = $subreturn;
-            }
-        } else {
-            $return = new PostWrapper($post, true);
         }
         return $return;
     }
@@ -149,6 +152,16 @@ class Anchor
 
         foreach($templates as $t) {
             self::$templates[] = basename($t,'.php');
+            if (substr(basename($t,'.php'),0,6)==="single") {
+                $type = substr(basename($t,'.php'),7);
+                self::$templates[] = $type.'/single';
+            }
+            if (substr(basename($t,'.php'),0,7)==="archive") {
+                $type = substr(basename($t,'.php'),8);
+                self::$templates[] = $type.'/archive';
+            }
+           
+            
         }
         return $template;
     }
