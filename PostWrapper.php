@@ -52,6 +52,9 @@ class PostWrapper {
 class PostMetaWrapper {
     function __construct($post=null) {
         $this->post = $post;
+        if (gettype($post)==="object") {
+            $this->post = $post->ID;
+        }
     }
     public function __call($name, $arguments) {
         return get_post_meta($this->post,$name,false);
