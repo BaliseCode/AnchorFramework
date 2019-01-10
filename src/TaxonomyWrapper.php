@@ -16,10 +16,9 @@ class TaxonomyWrapper {
         if ($taxonomy && gettype($taxonomy)==="object") {
             $this->slug = $taxonomy->name;
             $this->title = $taxonomy->labels->name; 
-            $this->content = apply_filters('the_content', $post->description);
-            $this->excerpt = ($post->description) ? $post->description :  wp_trim_words($post->description,  apply_filters( 'excerpt_length', 55 ), ' ' . '[&hellip;]');
+            $this->content = apply_filters('the_content', $taxonomy->description);
+            $this->excerpt = wp_trim_words($taxonomy->description,  apply_filters( 'excerpt_length', 55 ), ' ' . '[&hellip;]');
 
-            
             if ($post) {
                 $this->terms = get_the_terms($post, $taxonomy->name);
             } else {
@@ -33,10 +32,7 @@ class TaxonomyWrapper {
             }, $this->terms);
         }
         $this->isSync = false;
-
     }
-
-    
 }
 
 

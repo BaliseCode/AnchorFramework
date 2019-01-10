@@ -20,9 +20,9 @@ class TermWrapper {
         if ($term && gettype($term)==="object" && $isSync) {
             $this->id = $term->term_id;
             $this->slug = $term->slug;
-            $this->title = $term->name; 
+            $this->title = $term->name;  
 
-            $this->taxonomy = new AsyncTaxonomyWrapper($term->name); 
+            $this->taxonomy = new AsyncTaxonomyWrapper($term->taxonomy); 
 
             /*
             $this->order = $term->menu_order;
@@ -30,17 +30,16 @@ class TermWrapper {
             $this->post_type = $term->post_type;
             */
            
-            $this->url = get_permalink($term);
-            $this->content = apply_filters('the_content', $term->post_content);
-            $this->excerpt = ($term->post_excerpt) ? $term->post_excerpt :  wp_trim_words($term->post_content,  apply_filters( 'excerpt_length', 55 ), ' ' . '[&hellip;]');
-            $this->author_id = $term->author;
+
+            $this->content = apply_filters('the_content', $term->description);
+            $this->excerpt = wp_trim_words($term->description,  apply_filters( 'excerpt_length', 55 ), ' ' . '[&hellip;]');
+            $this->url = get_term_link($term);
+            $this->permalink = get_term_link($term);
+
             $this->post_parent = $term->post_parent;
 
-            $this->meta = new PostMetaWrapper($term);
-            $this->taxonomy = new PostTaxonomyWrapper($term);
-            $this->thumbnail = new PostThumbnail($term); 
-            $this->date = get_the_date();
-            $this->permalink = get_permalink($term);
+            $this->meta = new TermMetaWrapper($term);
+            
             $this->isSync = false;
         }
     }
@@ -52,5 +51,5 @@ class TermWrapper {
 }
 
 /*
-Array ( [0] => WP_Term Object ( [term_id] => 3 [name] => Qualipro [slug] => qualipro [term_group] => 0 [term_taxonomy_id] => 3 [taxonomy] => semences_categories [description] => [parent] => 0 [count] => 1 [filter] => raw ) )
+Array ( [description] => [parent] => 0 [count] => 1 [filter] => raw ) )
 */
