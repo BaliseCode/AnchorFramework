@@ -34,6 +34,7 @@ class PostWrapper {
                 $this->parent = new AsycPostWrapper($post->post_parent);
             }
             $this->meta = new PostMetaWrapper($post);
+            $this->taxonomy = new PostTaxonomyWrapper($post);
             $this->thumbnail = new PostThumbnail($post); 
             $this->date = get_the_date();
             $this->permalink = get_permalink($post);
@@ -44,23 +45,6 @@ class PostWrapper {
         if ($this->isSync) {
             $this->$name = $value;
         }
-    }
-}
-/*
-* LOAD THE META ON DEMAND
-*/
-class PostMetaWrapper {
-    function __construct($post=null) {
-        $this->post = $post;
-        if (gettype($post)==="object") {
-            $this->post = $post->ID;
-        }
-    }
-    public function __call($name, $arguments) {
-        return get_post_meta($this->post,$name,false);
-    }
-    public function __get($name) { 
-        return get_post_meta($this->post,$name,true);
     }
 }
 
@@ -76,27 +60,5 @@ class PostThumbnail {
     }
     public function __get($name) {
        return get_the_post_thumbnail_url($this->post);
-    }
-}
-/*
-* LOAD THE POST ON DEMAND
-*/
-class AsycPostWrapper {
-    private $virtual;
-    function __construct($id) {
-        $this->id = $id;
-        $this->virtual = null;
-    }
-    public function __tostring() {
-        return $this->id;
-    }
-    public function __get($name) {
-        if (!$this->virtual) {
-            $this->virtual = new PostWrapper($this->id);
-        }
-        if ($this->virtual) {
-            return $this->virtual->$name;
-        }
-        return '';
     }
 }

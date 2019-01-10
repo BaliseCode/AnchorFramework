@@ -9,7 +9,7 @@
 
 namespace Balise\AnchorFramework;
 
-class PostWrapper {
+class AuthorWrapper {
     /*
     * CONSTRUCTOR
     *
@@ -19,50 +19,14 @@ class PostWrapper {
             $post = get_post($post);
         }
         if ($post && gettype($post)==="object" ) {
-
-            $this->id = $post->ID;
-            $this->slug = $post->post_name;
-            $this->title = $post->post_title;
-            $this->content = apply_filters('the_content', $post->post_content);
-            $this->excerpt = $post->post_excerpt;
-            $this->author_id = $post->author;
-            $this->post_parent = $post->post_parent;
-
-            if ($post->post_parent)  {
-                $this->parent = new AsycPostWrapper($post->post_parent);
-            }
         }
-
-        /*
-
-        // TODO: ADD THIS LIST
-        [post_date] =>
-        [post_date_gmt] =>
-        [post_status] =>
-        [comment_status] =>
-        [ping_status] =>
-        [post_password] =>
-        [to_ping] =>
-        [pinged] =>
-        [post_modified] =>
-        [post_modified_gmt] =>
-        [post_content_filtered] =>
-        [guid] =>
-        [menu_order] =>
-        [post_type] =>
-        [post_mime_type] =>
-        [comment_count] =>
-        [filter] =>
-        */
     }
-    public function __get($name) {
-        return $name;
-    }
+
 }
 /*
 * LOAD THE POST ON DEMAND
 */
-class AsycPostWrapper {
+class AsyncAuthorWrapper {
     private $virtual;
     function __construct($id) {
         $this->id = $id;
@@ -73,7 +37,7 @@ class AsycPostWrapper {
     }
     public function __get($name) {
         if (!$this->virtual) {
-            $this->virtual = new PostWrapper($this->id);
+            $this->virtual = new AuthorWrapper($this->id);
         }
         if ($this->virtual) {
             return $this->virtual->$name;
