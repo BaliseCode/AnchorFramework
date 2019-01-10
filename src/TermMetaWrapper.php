@@ -17,10 +17,11 @@ class TermMetaWrapper {
     function __construct($term=null) {
         $this->post = $term;
         if (gettype($term)==="object") {
-            $this->post = $term->term_ID;
+            $this->post = $term->term_id;
         }
     }
     public function __call($name, $arguments) {
+        
         return get_term_meta($this->post,$name,false);
     }
     public function __get($name) { 
