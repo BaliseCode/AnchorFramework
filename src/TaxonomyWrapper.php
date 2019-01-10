@@ -28,6 +28,9 @@ class TaxonomyWrapper {
                     'hide_empty' => false,
                 ) );
             }
+            $this->terms = array_map(function($item) {
+                return new TermWrapper($item, true);
+            }, $this->terms);
         }
         $this->isSync = false;
 
@@ -51,7 +54,7 @@ class AsyncTaxonomyWrapper {
     }
     public function __get($name) {
         if (!$this->virtual) {
-            $this->virtual = new PostWrapper($this->id);
+             $this->virtual = new TaxonomyWrapper($this->id);
         }
         if ($this->virtual) {
             return $this->virtual->$name;

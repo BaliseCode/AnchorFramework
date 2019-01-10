@@ -22,7 +22,7 @@ class TermWrapper {
             $this->slug = $term->slug;
             $this->title = $term->name; 
 
-            $this->taxonomy = AsyncTaxonomyWrapper($term->name); 
+            $this->taxonomy = new AsyncTaxonomyWrapper($term->name); 
 
             /*
             $this->order = $term->menu_order;
@@ -35,9 +35,7 @@ class TermWrapper {
             $this->excerpt = ($term->post_excerpt) ? $term->post_excerpt :  wp_trim_words($term->post_content,  apply_filters( 'excerpt_length', 55 ), ' ' . '[&hellip;]');
             $this->author_id = $term->author;
             $this->post_parent = $term->post_parent;
-            if ($term->post_parent)  {
-                $this->parent = new AsycPostWrapper($term->post_parent);
-            }
+
             $this->meta = new PostMetaWrapper($term);
             $this->taxonomy = new PostTaxonomyWrapper($term);
             $this->thumbnail = new PostThumbnail($term); 
