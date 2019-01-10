@@ -26,6 +26,7 @@ class PostWrapper {
             $this->url = get_permalink($post);
             $this->slug = $post->post_name;
             $this->title = $post->post_title; 
+            $this->archive_url = get_post_type_archive_link($this->post_type);
             $this->content = apply_filters('the_content', $post->post_content);
             $this->excerpt = ($post->post_excerpt) ? $post->post_excerpt :  wp_trim_words($post->post_content,  apply_filters( 'excerpt_length', 55 ), ' ' . '[&hellip;]');
             $this->author_id = $post->author;
