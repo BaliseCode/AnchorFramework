@@ -22,7 +22,7 @@ class TermWrapper {
             $this->slug = $term->slug;
             $this->title = $term->name; 
 
-            $this->taxonomy = $term->name; 
+            $this->taxonomy = AsyncTaxonomyWrapper($term->name); 
 
             /*
             $this->order = $term->menu_order;
@@ -53,5 +53,6 @@ class TermWrapper {
     }
 }
 
-
+/*
 Array ( [0] => WP_Term Object ( [term_id] => 3 [name] => Qualipro [slug] => qualipro [term_group] => 0 [term_taxonomy_id] => 3 [taxonomy] => semences_categories [description] => [parent] => 0 [count] => 1 [filter] => raw ) )
+*/

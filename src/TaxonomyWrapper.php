@@ -40,7 +40,7 @@ class TaxonomyWrapper {
 /*
 * LOAD THE POST ON DEMAND
 */
-class TaxonomyWrapper {
+class AsyncTaxonomyWrapper {
     private $virtual;
     function __construct($id) {
         $this->id = $id;
