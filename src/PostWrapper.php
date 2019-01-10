@@ -62,3 +62,27 @@ class PostThumbnail {
        return get_the_post_thumbnail_url($this->post);
     }
 }
+
+
+/*
+* LOAD THE POST ON DEMAND
+*/
+class AsycPostWrapper {
+    private $virtual;
+    function __construct($id) {
+        $this->id = $id;
+        $this->virtual = null;
+    }
+    public function __tostring() {
+        return $this->id;
+    }
+    public function __get($name) {
+        if (!$this->virtual) {
+            $this->virtual = new PostWrapper($this->id);
+        }
+        if ($this->virtual) {
+            return $this->virtual->$name;
+        }
+        return '';
+    }
+}

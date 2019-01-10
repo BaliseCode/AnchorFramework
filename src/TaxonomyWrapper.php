@@ -10,6 +10,9 @@ class TaxonomyWrapper {
     private $isSync;
     function __construct($taxonomy, $post=null,$isSync=false) {
         $this->isSync = $isSync;
+        if (gettype($taxonomy)==="string") {
+            $taxonomy = get_taxonomy($taxonomy);
+        }
         if ($taxonomy && gettype($taxonomy)==="object") {
             $this->slug = $taxonomy->name;
             $this->title = $taxonomy->labels->name; 
@@ -25,13 +28,34 @@ class TaxonomyWrapper {
                     'hide_empty' => false,
                 ) );
             }
-        
-            
         }
-       
         $this->isSync = false;
 
     }
 
     
+}
+
+
+/*
+* LOAD THE POST ON DEMAND
+*/
+class TaxonomyWrapper {
+    private $virtual;
+    function __construct($id) {
+        $this->id = $id;
+        $this->virtual = null;
+    }
+    public function __tostring() {
+        return $this->id;
+    }
+    public function __get($name) {
+        if (!$this->virtual) {
+            $this->virtual = new PostWrapper($this->id);
+        }
+        if ($this->virtual) {
+            return $this->virtual->$name;
+        }
+        return '';
+    }
 }
