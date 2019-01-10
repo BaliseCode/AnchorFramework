@@ -28,7 +28,7 @@ class PostTaxonomyWrapper {
                 return false;
             });
             foreach($tax as $key => $val) {
-                $this->virtual->{$key} = $val;
+                $this->virtual->{$key} = new TaxonomyWrapper($val, $post);
             }
         }
         return $this->virtual->{$name};
