@@ -14,6 +14,7 @@ namespace Balise\AnchorFramework;
 */
 class PostTaxonomyWrapper {
     private $virtual = null;
+    private $post;
     function __construct($post=null)  {
         $this->post = $post;
     }
@@ -21,16 +22,16 @@ class PostTaxonomyWrapper {
     public function __get($name) { 
         if (!$this->virtual) {
             $this->virtual = (object) array();
-            $this->post->post_type;
+            $posttype = $this->post->post_type;
             $tax = array_filter(get_taxonomies(null,'object'),function ($item) use ($posttype) {
             if (in_array ($posttype, $item->object_type)) return true;
-            return false;
+                return false;
             });
             foreach($tax as $key => $val) {
-                $this->virtual[$key] = $val;
+                $this->virtual->{$key} = $val;
             }
         }
-        return $this->virtual[$name];
+        return $this->virtual->{$name};
     }
    
     
