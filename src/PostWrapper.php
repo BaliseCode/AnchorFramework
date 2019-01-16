@@ -59,7 +59,7 @@ class PostThumbnail {
     public function __invoke($arguments) {
         return get_the_post_thumbnail_url($this->post);
     }
-    public function __get($name) {
+    public function __toString()  {
        return get_the_post_thumbnail_url($this->post);
     }
 }
