@@ -189,7 +189,13 @@ class Anchor
             @$wp_styles->done = array();
             @$wp_scripts->done = array();
             $template = self::$renderer->render($array[0], self::$data);
+            
+            $template = str_replace("<html>","<html ".get_language_attributes().">",$template);
+            $template = str_replace("<body>",'<body class="'.implode(" ",get_body_class()).'">',$template);
+            
             echo $template;
+            
+            
             if (!is_admin()) {
                 $wp_styles->done = array();
                 $wp_scripts->done = array();
