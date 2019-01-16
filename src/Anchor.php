@@ -180,6 +180,31 @@ class Anchor
             self::$renderer->addCustomCompiler('wp_head', function($expression) {
                 return '<?php wp_head(); ?>';
             });
+            self::$renderer->addCustomCompiler('doquery', function($expression) {
+                $expression = \substr($expression,1,-1);
+                return '<?php 
+                use Balise\AnchorFramework\PostWrapper;
+                if (!isset($__posts)) { $posts = array(); }
+                $__posts[] = $posts;
+                 
+                $posts = array_map(function($post){
+
+                    return new PostWrapper($post, true);
+                }, get_posts('.$expression.'));
+                 
+                ?>
+                ';
+            }); 
+             self::$renderer->addCustomCompiler('endquery', function() {
+                return '<?php 
+                $posts = array_pop($__posts);
+                
+                ?>
+                ';
+            });
+
+
+
             self::$renderer->addCustomCompiler('wp_footer', function($expression) {
                 return '<?php wp_footer(); ?>';
             });
