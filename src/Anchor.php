@@ -181,7 +181,6 @@ class Anchor
                 return '<?php wp_head(); ?>';
             });
             self::$renderer->addCustomCompiler('doquery', function($expression) {
-                $expression = \substr($expression,1,-1);
                 return '<?php 
                 use Balise\AnchorFramework\PostWrapper;
                 if (!isset($__posts)) { $posts = array(); }
