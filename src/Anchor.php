@@ -47,7 +47,7 @@ class Anchor
         if (!self::$renderer) {
             $paths = new \SplPriorityQueue;
             $paths->insert(get_template_directory().'/app/views', 200);
-            $paths->insert(__DIR__.'/views', 100);
+            $paths->insert(dirname(__DIR__).'/views', 100);
             self::$renderer = new BladeRenderer($paths, array('cache_path' => get_template_directory(). '/public/views/'));
             self::$renderer->addCustomCompiler('wp_head', function($expression) {
                 return '<?php wp_head(); ?>';
