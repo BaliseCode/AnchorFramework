@@ -59,7 +59,7 @@ class PostThumbnail {
     public function __invoke($arguments) {
         return get_the_post_thumbnail_url($this->post);
     }
-    public function __toString()  {
+    public function __get($name) {
        return get_the_post_thumbnail_url($this->post);
     }
 }
@@ -79,7 +79,7 @@ class AsycPostWrapper {
     }
     public function __get($name) {
         if (!$this->virtual) {
-            $this->virtual = new PostWrapper($this->id);
+            $this->virtual = new PostWrapper($this->id ,true);
         }
         if ($this->virtual) {
             return $this->virtual->$name;
