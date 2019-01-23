@@ -1,13 +1,17 @@
 @extends('layout.wrapper')
-
-@section('title', '')
-
 @section('body')
-<div class="centeredContent">
-    <h1>{{ get_bloginfo('name') }}
-        <small>{{ __('Welcome') }}</small>
-    </h1>
-
-
+<div class="box flip">
+    <div class="imagebox">
+        <div class="image" style="background-image: url(); background-position: center;">
+        
+        </div>
+    </div>
+    <div class="message">
+        <h1> Site Name <small>A wordpress site</small></h1>
+        <p>
+            Congratulation, your site is now up and running using Anchor. Now let's get to work!
+        </p>
+        <p><a href="#">See Anchor documentation.</a></p>
+    </div>
 </div>
 @endsection
