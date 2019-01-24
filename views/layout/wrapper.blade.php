@@ -10,5 +10,6 @@
 </head>
 <body>
     @yield('body')
+    @wp_footer
 </body>
 </html>
