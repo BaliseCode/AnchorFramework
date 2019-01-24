@@ -13,7 +13,7 @@
           The document or file requested was not found. Maybe you should try
           another url.
         </p>
-        <p><a href="#">Go back to homepage</a></p>
+        <p><a href="<?php bloginfo("url")?>">Go back to homepage</a></p>
       </div>
     </div>
 @endsection
