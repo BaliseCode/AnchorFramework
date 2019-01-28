@@ -42,29 +42,9 @@ class Anchor
     /**
     * render function hook
     */
-    public static function Render($template = null, $data = null) {
-
-        if (!self::$renderer) {
-            $paths = new \SplPriorityQueue;
-            $paths->insert(get_template_directory().'/app/views', 200);
-            $paths->insert(dirname(__DIR__).'/views', 100);
-            self::$renderer = new BladeRenderer($paths, array('cache_path' => get_template_directory(). '/public/views/'));
-            self::$renderer->addCustomCompiler('wp_head', function($expression) {
-                return '<?php wp_head(); ?>';
-            });
-            self::$renderer->addCustomCompiler('wp_footer', function($expression) {
-                return '<?php wp_footer(); ?>';
-            });
-        }
-
-        if ($template && $data) {
-            return self::$renderer->render($template, $data);
-        }
-        else {
-            self::$data = self::getData();
-            self::loadTemplate(self::$templates); 
-        }
-        
+    public static function Render() {
+        self::$data = self::getData();
+        self::loadTemplate(self::$templates); 
 
     }
     /**
@@ -192,12 +172,54 @@ class Anchor
     private static function loadTemplate($array) {
         global $wp_styles,$wp_scripts;
         if (!$array || !is_array($array) || count($array)===0) return;
+        if (!self::$renderer) {
+            $paths = new \SplPriorityQueue;
+            $paths->insert(get_template_directory().'/app/views', 200);
+            $paths->insert(__DIR__.'/views', 100);
+            self::$renderer = new BladeRenderer($paths, array('cache_path' => get_template_directory(). '/public/views/'));
+            self::$renderer->addCustomCompiler('wp_head', function($expression) {
+                return '<?php wp_head(); ?>';
+            });
+            self::$renderer->addCustomCompiler('doquery', function($expression) {
+                return '<?php 
+                use Balise\AnchorFramework\PostWrapper;
+                if (!isset($__posts)) { $posts = array(); }
+                $__posts[] = $posts;
+                 
+                $posts = array_map(function($post){
+
+                    return new PostWrapper($post, true);
+                }, get_posts('.$expression.'));
+                 
+                ?>
+                ';
+            }); 
+             self::$renderer->addCustomCompiler('endquery', function() {
+                return '<?php 
+                $posts = array_pop($__posts);
+                
+                ?>
+                ';
+            });
+
+
+
+            self::$renderer->addCustomCompiler('wp_footer', function($expression) {
+                return '<?php wp_footer(); ?>';
+            });
+        }
         if (self::checkTemplatePresence($array[0])) {
             self::$renderer->render($array[0], []);
             @$wp_styles->done = array();
             @$wp_scripts->done = array();
             $template = self::$renderer->render($array[0], self::$data);
+            
+            $template = str_replace("<html>","<html ".get_language_attributes().">",$template);
+            $template = str_replace("<body>",'<body class="'.implode(" ",get_body_class()).'">',$template);
+            
             echo $template;
+            
+            
             if (!is_admin()) {
                 $wp_styles->done = array();
                 $wp_scripts->done = array();
@@ -212,7 +234,7 @@ class Anchor
     protected static function checkTemplatePresence($raw_name) {
         $name = str_replace('.','/',$raw_name);
         if (file_exists(get_template_directory()."/app/views/${name}.blade.php")) return true;
-         if (file_exists(dirname ( __DIR__)."/views/${name}.blade.php")) return true;
+        if (file_exists(__DIR__."/views/${name}.blade.php")) return true;
         return false;
     }
     
