@@ -234,7 +234,7 @@ class Anchor
     protected static function checkTemplatePresence($raw_name) {
         $name = str_replace('.','/',$raw_name);
         if (file_exists(get_template_directory()."/app/views/${name}.blade.php")) return true;
-        if (file_exists(__DIR__."/views/${name}.blade.php")) return true;
+        if (file_exists(dirname(__DIR__)."/views/${name}.blade.php")) return true;
         return false;
     }
     
