@@ -1,36 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <title>@yield('title')</title>
-    <style media="screen">
-    body {
-        font-family: 'Nunito', sans-serif;
-    }
-    .centeredContent {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        width: 100%;
-        padding: 5%;
-        box-sizing: border-box;
-        text-align: center;
-    }
-    h1 {
-        font-weight: 400;
-        line-height: 1.1;
-
-        font-size: 15vmin;
-    }
-    h1 small {
-        font-size: 26px;
-        display: block;
-    }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display|Roboto" rel="stylesheet" />
+    <style>/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */button,hr,input{overflow:visible}progress,sub,sup{vertical-align:baseline}html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0;text-align:center}details,main{display:block}hr{-webkit-box-sizing:content-box;box-sizing:content-box;height:0}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;text-decoration:none;color:#82B5A5}abbr[title]{border-bottom:none;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:ButtonText dotted 1px}fieldset{padding:.35em .75em .625em}legend{-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}textarea{overflow:auto}[type=checkbox],[type=radio]{-webkit-box-sizing:border-box;box-sizing:border-box;padding:0}.box,.box>*{-webkit-box-sizing:border-box}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}[hidden],template{display:none}body,html{height:100%;min-height:480px}.image{border-radius:50px;-webkit-box-shadow:0 10px 30px rgba(0,0,0,.1);box-shadow:0 10px 30px rgba(0,0,0,.1);background-size:cover;background-position:50%;background-repeat:no-repeat;position:absolute;top:1rem;bottom:1rem;left:1rem;right:1rem}.box{box-sizing:border-box;padding:1vw;height:100%;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.box>*{padding:2vw;box-sizing:border-box}@media (orientation:landscape){.box,.box.flip{-webkit-box-orient:horizontal}.box{-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}.box.flip{-webkit-box-direction:reverse;-ms-flex-direction:row-reverse;flex-direction:row-reverse}.box .message{text-align:left}.box>*{width:50%;max-width:50%}}.box .imagebox{width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;height:100%;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;max-height:50%;position:relative}@media (orientation:landscape){.box .imagebox{max-height:none}}html{font-family:Roboto,sans-serif;font-size:16px}@media screen and (min-width:320px){html{font-size:calc(16px + 4 * ((100vw - 320px)/ 880))}}@media screen and (min-width:1200px){html{font-size:20px}}h1{margin:0 0 .67em;font-family:"Playfair Display",serif;font-weight:400;line-height:1;font-size:48.83px}@media screen and (min-width:320px){h1{font-size:calc(48.83px + 18.51 * ((100vw - 320px)/ 880))}}@media screen and (min-width:1200px){h1{font-size:67.34px}}h1 small{font-size:1rem;line-height:1rem;color:#ccc;display:block}</style>
 </head>
 <body>
     @yield('body')
