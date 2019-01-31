@@ -43,26 +43,20 @@ class Anchor
             $paths->insert(get_template_directory() . '/app/views', 200);
             $paths->insert(dirname(__DIR__) . '/views', 100);
             self::$renderer = new BladeRenderer($paths, array('cache_path' => get_template_directory() . '/public/views/'));
-            
-            
             self::$renderer->addCustomCompiler('wp_head', function ($expression) {
                 return '<?php wp_head(); ?>';
             });
-            
-            self::$renderer->addCustomCompiler('wp_footer', function ($expression) {
-                return '<?php wp_footer(); ?>';
-            });
-            
-            
             self::$renderer->addCustomCompiler('doquery', function ($expression) {
                 return '<?php
                 use Balise\AnchorFramework\PostWrapper;
                 if (!isset($__posts)) { $posts = array(); }
                 $__posts[] = $posts;
+
                 $posts = array_map(function($post){
 
                     return new PostWrapper($post, true);
                 }, get_posts(' . $expression . '));
+
                 ?>
                 ';
             });
@@ -74,6 +68,9 @@ class Anchor
                 ';
             });
 
+            self::$renderer->addCustomCompiler('wp_footer', function ($expression) {
+                return '<?php wp_footer(); ?>';
+            });
         }
     }
     /**
