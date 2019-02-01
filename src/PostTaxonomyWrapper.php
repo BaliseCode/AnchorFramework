@@ -31,8 +31,7 @@ class PostTaxonomyWrapper {
                 $this->virtual->{$key} = new TaxonomyWrapper($val, $this->post);
             }
         }
-        return $this->virtual->{$name};
+        if (isset($this->virtual->{$name})) return $this->virtual->{$name};
+        return null;
     }
-   
-    
 }
