@@ -33,7 +33,7 @@ class Anchor
     
     public static function Init()
     {
-        add_filter('template_include',funtion($t){
+        add_filter('template_include',function($t){
         return 'index.php';
         });
         add_filter('theme_templates', array('Balise\AnchorFramework\Anchor', 'loadThemeTemplates'), 10, 4);
