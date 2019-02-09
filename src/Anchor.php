@@ -30,8 +30,12 @@ class Anchor
      * - Make sure the template_loader hierarchy gets saved
      *
      */
+    
     public static function Init()
     {
+        add_filter('template_include',funtion($t){
+        return 'index.php';
+        });
         add_filter('theme_templates', array('Balise\AnchorFramework\Anchor', 'loadThemeTemplates'), 10, 4);
         $types = array('index', '404', 'archive', 'author', 'category', 'tag', 'taxonomy', 'date', 'embed', 'home', 'frontpage', 'page', 'paged', 'search', 'single', 'singular', 'attachment');
         foreach ($types as $type) {
