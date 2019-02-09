@@ -34,7 +34,7 @@ class Anchor
     public static function Init()
     {
         add_filter('template_include',function($t){
-        return 'index.php';
+        return get_template_directory().'/index.php';
         });
         add_filter('theme_templates', array('Balise\AnchorFramework\Anchor', 'loadThemeTemplates'), 10, 4);
         $types = array('index', '404', 'archive', 'author', 'category', 'tag', 'taxonomy', 'date', 'embed', 'home', 'frontpage', 'page', 'paged', 'search', 'single', 'singular', 'attachment');
