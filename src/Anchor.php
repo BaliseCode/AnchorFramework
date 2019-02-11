@@ -86,7 +86,7 @@ class Anchor
             return self::$renderer->render($template, $data);
         } else {
             self::$data = self::getData();
-            self::$templates[] = "index.php";
+            self::$templates[] = "index";
             self::loadTemplate(self::$templates);
         }
     }
