@@ -65,7 +65,7 @@ class PostThumbnail {
     }
     public function __toString()  {
         if (get_the_post_thumbnail_url($this->post)) return get_the_post_thumbnail_url($this->post);
-       return false;
+       return "";
     }
 }
 
