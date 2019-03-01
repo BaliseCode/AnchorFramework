@@ -31,7 +31,7 @@ class PostWrapper {
             $this->excerpt = ($post->post_excerpt) ? $post->post_excerpt :  wp_trim_words($post->post_content,  apply_filters( 'excerpt_length', 55 ), ' ' . '[&hellip;]');
             $this->author_id = $post->post_author;
 
-            $this->author = new AsyncAuthorWrapper($post->post_author); 
+            $this->author = new AuthorWrapper($post->post_author); 
 
 
             $this->post_parent = $post->post_parent;
@@ -85,6 +85,31 @@ class AsycPostWrapper {
     public function __get($name) {
         if (!$this->virtual) {
             $this->virtual = new PostWrapper($this->id);
+        }
+        if ($this->virtual) {
+            return $this->virtual->$name;
+        }
+        return '';
+    }
+}
+
+
+
+/*  
+* LOAD THE POST ON DEMAND
+*/
+class AsyncAuthorWrapper {
+    private $virtual;
+    function __construct($id) {
+        $this->id = $id;
+        $this->virtual = null;
+    }
+    public function __tostring() {
+        return $this->id;
+    }
+    public function __get($name) {
+        if (!$this->virtual) {
+            $this->virtual = new AuthorWrapper($this->id);
         }
         if ($this->virtual) {
             return $this->virtual->$name;
