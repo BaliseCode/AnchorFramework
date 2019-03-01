@@ -29,25 +29,3 @@ class AuthorWrapper {
     }
 
 }
-/*  
-* LOAD THE POST ON DEMAND
-*/
-class AsyncAuthorWrapper {
-    private $virtual;
-    function __construct($id) {
-        $this->id = $id;
-        $this->virtual = null;
-    }
-    public function __tostring() {
-        return $this->id;
-    }
-    public function __get($name) {
-        if (!$this->virtual) {
-            $this->virtual = new AuthorWrapper($this->id);
-        }
-        if ($this->virtual) {
-            return $this->virtual->$name;
-        }
-        return '';
-    }
-}
