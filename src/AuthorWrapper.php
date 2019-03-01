@@ -14,16 +14,22 @@ class AuthorWrapper {
     * CONSTRUCTOR
     *
     */
-    function __construct($post=null) {
-        if (gettype ($post)==="integer") {
-            $post = get_post($post);
+    function __construct($user=null) {
+
+        $this->title = ""; 
+        $this->content = "";
+        if (gettype($user)!=="object") {
+            $user = get_user_by('id',$user);
+            
         }
-        if ($post && gettype($post)==="object" ) {
+        if ($user && gettype($user)==="object" ) {
+            $this->title = ($user->display_name) ? $user->display_name : $user->user_nicename;
+            $this->content = $user->description;
         }
     }
 
 }
-/*
+/*  
 * LOAD THE POST ON DEMAND
 */
 class AsyncAuthorWrapper {
