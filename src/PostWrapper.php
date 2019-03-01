@@ -31,7 +31,7 @@ class PostWrapper {
             $this->excerpt = ($post->post_excerpt) ? $post->post_excerpt :  wp_trim_words($post->post_content,  apply_filters( 'excerpt_length', 55 ), ' ' . '[&hellip;]');
             $this->author_id = $post->post_author;
 
-            $this->author = new AsycAuthorWrapper($post->post_author); 
+            $this->author = new AsyncAuthorWrapper($post->post_author); 
 
 
             $this->post_parent = $post->post_parent;
