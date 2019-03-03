@@ -57,7 +57,7 @@ class Anchor
 
                 $posts = array_map(function($post){
 
-                    return new Balise\AnchorFramework\PostWrapper($post, true);
+                    return new \Balise\AnchorFramework\PostWrapper($post, true);
                 }, get_posts(' . $expression . '));
 
                 ?>
