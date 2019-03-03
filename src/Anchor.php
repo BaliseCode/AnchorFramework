@@ -52,13 +52,12 @@ class Anchor
             });
             self::$renderer->addCustomCompiler('doquery', function ($expression) {
                 return '<?php
-                use Balise\AnchorFramework\PostWrapper;
                 if (!isset($__posts)) { $posts = array(); }
                 $__posts[] = $posts;
 
                 $posts = array_map(function($post){
 
-                    return new PostWrapper($post, true);
+                    return new Balise\AnchorFramework\PostWrapper($post, true);
                 }, get_posts(' . $expression . '));
 
                 ?>
