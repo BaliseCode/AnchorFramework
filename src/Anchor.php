@@ -60,9 +60,8 @@ class Anchor
                 if (!$args["paged"]) {
                    $args["paged"] = get_query_var( "paged", 1 );
                 }
-$               query = = new WP_Query($args);
+                $query = new WP_Query($args);
                 $posts = array_map(function($post){
-
                     return new \Balise\AnchorFramework\PostWrapper($post, true);
                 }, $query->posts);
 
