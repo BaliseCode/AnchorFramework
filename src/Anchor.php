@@ -55,19 +55,16 @@ class Anchor
                 if (!isset($__posts)) { $posts = array(); }
                 $__posts[] = $posts;
                 
-                $args = $expression;
-                if (!$args) $args = array();
-                if (!$args["posts_per_page"]) {
-                   $args["posts_per_page"] = get_options("posts_per_page");
-                }
-                if (!$args["offset"]) {
-                   $args["offset"] = get_query_var( "paged", 1 );
-                }
+                $args = '.$expression.';
 
+                if (!$args["paged"]) {
+                   $args["paged"] = get_query_var( "paged", 1 );
+                }
+$               query = = new WP_Query($args);
                 $posts = array_map(function($post){
 
                     return new \Balise\AnchorFramework\PostWrapper($post, true);
-                }, get_posts($args));
+                }, $query->posts);
 
                 ?>
                 ';
