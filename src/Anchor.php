@@ -57,7 +57,7 @@ class Anchor
                 
                 $args = '.$expression.';
 
-                if (!$args["paged"]) {
+                if (@!$args["paged"]) {
                    $args["paged"] = get_query_var( "paged", 1 );
                 }
                 $query = new WP_Query($args);
