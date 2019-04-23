@@ -6,5 +6,5 @@
 * with this source code in the file LICENSE.
 */
 function theme_asset($url) {
-   return get_stylesheet_directory_uri()."/public/images".$url;
+   return get_stylesheet_directory_uri()."/public/images/".$url;
 }
