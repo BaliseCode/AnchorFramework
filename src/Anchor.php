@@ -228,11 +228,18 @@ class Anchor
         }
 
         if (self::checkTemplatePresence($array[0])) {
+            $isadmin = is_admin_bar_showing();
+            add_filter('show_admin_bar', '__return_false');
             self::$renderer->render($array[0], []);
             @$wp_styles->done = array();
-            @$wp_scripts->done = array();
+            @$wp_scripts->done = array(); 
+            if ($isadmin) {
+                add_filter('show_admin_bar', '__return_true');
+            }
             $template = self::$renderer->render($array[0], self::$data);
-
+            
+            
+            
             $template = str_replace("<html>", "<html " . get_language_attributes() . ">", $template);
             $template = str_replace("<body>", '<body class="' . implode(" ", get_body_class()) . '">', $template);
 
