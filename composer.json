@@ -17,7 +17,7 @@
         "psr-4": {
             "Balise\\AnchorFramework\\": "/src/"
         },
-        "files": ["functions/attachement.php"]
+        "files": ["functions/attachement.php","functions/asset.php"]
 
 
     }
