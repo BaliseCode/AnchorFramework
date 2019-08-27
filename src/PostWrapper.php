@@ -41,7 +41,7 @@ class PostWrapper {
             $this->meta = new PostMetaWrapper($post);
             $this->taxonomy = new PostTaxonomyWrapper($post);
             $this->thumbnail = new PostThumbnail($post); 
-            $this->date = get_the_date("", $post);
+            $this->date = get_the_time(get_option( 'date_format' ), $post);
             $this->permalink = get_permalink($post);
             $this->isSync = false;
         }
