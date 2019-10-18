@@ -44,6 +44,9 @@ class Anchor
         
         if (!self::$renderer) {
             $paths = new \SplPriorityQueue;
+            $paths->insert(get_stylesheet_directory() . '/app/components', 301);
+            $paths->insert(get_stylesheet_directory() . '/app/views', 300);
+            $paths->insert(get_template_directory() . '/app/components', 201);
             $paths->insert(get_template_directory() . '/app/views', 200);
             $paths->insert(dirname(__DIR__) . '/views', 100);
             self::$renderer = new BladeRenderer($paths, array('cache_path' => get_template_directory() . '/public/views/'));
@@ -259,11 +262,16 @@ class Anchor
     protected static function checkTemplatePresence($raw_name)
     {
         $name = str_replace('.', '/', $raw_name);
-        if (file_exists(get_template_directory() . "/app/views/${name}.blade.php")) {
+        if (
+            file_exists(get_stylesheet_directory() . "/app/components/${name}.blade.php") ||
+            file_exists(get_template_directory() . "/app/views/${name}.blade.php") ||
+            file_exists(get_stylesheet_directory() . "/app/components/${name}.blade.php") ||
+            file_exists(get_template_directory() . "/app/views/${name}.blade.php") ||
+            file_exists(dirname(__DIR__) . "/views/${name}.blade.php")) {
             return true;
         }
 
-        if (file_exists(dirname(__DIR__) . "/views/${name}.blade.php")) {
+        if () {
             return true;
         }
 
