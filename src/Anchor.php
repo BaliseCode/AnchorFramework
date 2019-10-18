@@ -270,11 +270,6 @@ class Anchor
             file_exists(dirname(__DIR__) . "/views/${name}.blade.php")) {
             return true;
         }
-
-        if () {
-            return true;
-        }
-
         return false;
     }
 
